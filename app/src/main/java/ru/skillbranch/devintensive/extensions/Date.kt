@@ -1,0 +1,68 @@
+package ru.skillbranch.devintensive.extensions
+
+import java.lang.IllegalStateException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.math.abs
+
+const val SECOND = 1000L
+const val MINUTE = 60 * SECOND
+const val HOUR = 60 * MINUTE
+const val DAY = 24 * HOUR
+
+fun Date.format(pattern:String="HH:mm:ss dd.MM.yy"):String {
+    val dateFormat = SimpleDateFormat(pattern, Locale("ru"))
+    return dateFormat.format(this)
+}
+
+fun Date.add(value: Int, units: TimeUnits = TimeUnits.SECOND) : Date{
+    var time = this.time
+
+    time += when(units){
+        TimeUnits.SECOND -> value * SECOND
+        TimeUnits.MINUTE -> value * MINUTE
+        TimeUnits.HOUR -> value * HOUR
+        TimeUnits.DAY -> value * DAY
+    }
+
+    this.time = time
+    return this
+}
+
+fun Date.humanizeDiff(date:Date = Date()): Long? {
+    /*return when {
+        abs(this.time - date.time) <= SECOND && date > this -> "только что"
+        this.time < date.time - 360 * DAY -> "более года назад"
+        this.time > date.time + 360 * DAY -> "более чем через год"
+        else -> {
+            val seconds = (abs(this.time - date.time) / SECOND).toInt()
+            val template = if (this > date) "через %s" else "%s назад"
+            template.format(
+                when {
+                    seconds in 1..45 -> "несколько секунд"
+                    seconds in 45..75 -> "минуту"
+                    seconds in 75..45 * 60 -> plural(seconds / 60, TimeUnits.MINUTE)
+                    seconds in 45 * 60..75 * 60 -> "час"
+                    seconds in 75 * 60..22 * 3600 -> plural(seconds / 3600, TimeUnits.HOUR)
+                    seconds in 22 * 3600..26 * 3600 -> "день"
+                    seconds in 26 * 3600..360 * 86400 -> plural(seconds / 86400, TimeUnits.DAY)
+                    else -> throw IllegalStateException()
+                }
+            )
+        }
+
+    }
+    */
+    return null
+}
+
+enum class TimeUnits{
+    SECOND,
+    MINUTE,
+    HOUR,
+    DAY;
+
+    fun plural(i: Int): String? {
+        return null
+    }
+}
